@@ -1,1 +1,1 @@
-{"description":"萌ICP备案：萌友圈趣味备案登记站（非工信部正式 ICP 备案）","engines":{"bun":">=1.0.0"},"name":"moe-icp","private":true,"scripts":{"dev":"bun run server/index.ts","seed":"bun run scripts/seed.ts","start":"bun run server/index.ts"},"type":"module","version":"1.0.0"}
+{"description":"萌ICP备案 Cloudflare 版本：Pages + Pages Functions + D1","name":"moe-icp-cf","private":true,"scripts":{"deploy":"wrangler pages deploy public","dev":"wrangler pages dev public"},"version":"1.0.0"}

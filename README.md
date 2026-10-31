@@ -1,67 +1,34 @@
-# 萌ICP备案
+# 萌ICP备案 · Cloudflare 版本（`cf` 分支）
 
 给个人小站领一个可爱备案号的趣味登记站：查号、申请、审核、公示、复制页脚代码。
 
 > **重要声明：本站为趣味社区备案演示，与工信部 ICP 备案无关，请勿用于冒充正式备案。**
+>
+> 本分支与主线（Docker / Bun + 本地 SQLite）功能和 API 契约一致，区别只在运行层：
+> 静态前端用 Cloudflare Pages 托管，API 用 Pages Functions，数据用 Cloudflare D1（托管 SQLite）。
+> 主线版本在 `main` 分支。
 
-## 快速开始（Docker，推荐）
-
-```bash
-# 可选：设置管理员口令（生产务必设置）
-export ADMIN_TOKEN="换成你的强口令"
-
-docker compose up -d --build
-# 打开 http://localhost:3000
-# 健康检查：curl http://localhost:3000/api/health
-# 停止：docker compose down
-# 数据保存在名为 icp-data 的卷里；删除卷会清空数据：docker compose down -v
-```
-
-## 本地运行（无 Docker）
-
-```bash
-bun run server/index.ts
-# 可选演示数据：bun run scripts/seed.ts（仅库为空时写入）
-```
-
-环境变量：`PORT`（默认 3000）、`DB_PATH`（默认 `data/icp.db`）、`ADMIN_TOKEN`（留空则审核/注销不鉴权，仅演示）。
-
-## 备案号规则
-
-后端按自增 id 生成：`萌ICP备{年份}{id+10000 补零到 5 位}号`，例如第一条是 `萌ICP备202610001号`。
-同一域名同时只能有一条未被驳回的记录；被驳回后可以重新申请。
-
-## API
-
-| 方法 | 路径 | 说明 |
-| --- | --- | --- |
-| GET | `/api/health` | 健康检查 |
-| GET | `/api/filings?page=&limit=&q=&status=&category=` | 列表 / 搜索（默认每页 30 条，最多 100 条） |
-| GET | `/api/stats` | 累计 / 已通过 / 待审核 |
-| GET | `/api/filings/:id` | 详情 |
-| POST | `/api/filings` | 申请（字段：site_name、domain、owner_name、contact、description、category；同一 IP 每分钟限 20 次） |
-| PATCH | `/api/filings/:id` | 审核 / 编辑（status：pending / approved / rejected，review_note；设置 ADMIN_TOKEN 后需 `Authorization: Bearer <口令>`） |
-| DELETE | `/api/filings/:id` | 注销（同上鉴权） |
-
-## 文件结构
+## 架构
 
 ```text
-public/index.html   前端页面
-public/app.js       前端逻辑（搜索、分页、申请、详情、审核台）
-public/style.css    现代粉紫渐变样式
-server/index.ts     Bun 后端 + SQLite + 静态文件服务
-scripts/seed.ts     演示数据（可选）
-schema.sql          数据库结构与索引
-Dockerfile          轻量镜像（oven/bun:1-alpine）
-docker-compose.yml  一键部署（数据卷持久化）
-DEPLOY.md           详细部署说明
+public/                  Pages 静态前端（与主线同一套页面）
+functions/api/           Pages Functions
+  health.js              GET /api/health
+  stats.js               GET /api/stats
+  filings.js             GET /api/filings（分页/搜索）、POST /api/filings（申请）
+  filings/[id].js        GET /api/filings/:id、PATCH（审核）、DELETE（注销）
+schema.sql               D1 建表与索引
+wrangler.toml            Pages 输出目录 + D1 绑定（binding = DB）
 ```
 
-## Cloudflare 版本
+备案号规则与主线一致：`萌ICP备{年份}{id+10000 补零到 5 位}号`，同一域名同时只能有一条未被驳回的记录。
+列表默认每页 30 条、最多 100 条，避免大表全量扫描烧 D1 读额度。
 
-主线是 Docker / Bun 版本。另有 `cf` 分支：Cloudflare Pages + Pages Functions + D1 版本，部署方法见该分支的 `DEPLOY.md`。
+## 部署（见 DEPLOY.md）
 
-## 生产部署注意
+简述：建 D1 库 → 把 `database_id` 填进 `wrangler.toml` → 用 `schema.sql` 建表 → Pages 连接本仓库的 `cf` 分支，构建命令留空、输出目录 `public`，并绑定 D1（`DB`）和可选的 `ADMIN_TOKEN`。
 
-- 审核台务必设置 `ADMIN_TOKEN`，不要把审核接口公开暴露。
-- 建议用反向代理 + HTTPS 部署，并定期备份数据库（Docker 卷或 `data/icp.db`）。
+## 免费额度参考
+
+Workers Free 每天 10 万次请求、D1 Free 每天 500 万行读 / 10 万行写、单库 500MB。
+这个站读多写少，个人站 / 萌友圈量级免费版足够；超额后当天查询会报错、UTC 午夜重置，不会自动扣费。

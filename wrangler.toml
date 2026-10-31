@@ -1,0 +1,10 @@
+name = "moe-icp"
+compatibility_date = "2026-10-01"
+pages_build_output_dir = "public"
+
+# D1 绑定：先用 wrangler d1 create moe-icp-db 建库，把返回的 database_id 填到下面，
+# 也可以在 Pages 项目设置里直接绑定（Settings > Functions > D1 database bindings）。
+[[d1_databases]]
+binding = "DB"
+database_name = "moe-icp-db"
+database_id = "REPLACE_WITH_YOUR_D1_ID"
