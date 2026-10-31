@@ -34,6 +34,7 @@
       <select id="fStatus"><option value="">全部状态</option><option value="pending">待审核</option><option value="approved">已通过</option><option value="rejected">已驳回</option></select>
     </div>
     <div class="grid" id="hall"></div>
+    <div id="hallMore"></div>
     <div id="detail" style="margin-top:16px"></div>
   </section>
 
@@ -61,7 +62,8 @@
 
   <section class="panel" id="panel-review" style="display:none">
     <h2>审核台</h2>
-    <p class="muted">演示版审核台暂不设登录，生产部署请先加管理员鉴权再开放。</p>
+    <p class="muted">若服务端设置了 ADMIN_TOKEN，请先在此填写管理员口令再审核 / 注销；未设置则为演示模式。</p>
+    <p><input id="adminToken" type="password" placeholder="管理员口令（ADMIN_TOKEN，未设置可留空）" autocomplete="off"></p>
     <div id="review"></div>
   </section>
 
@@ -73,7 +75,7 @@
       <li>在站点详情里复制页脚代码，放到你网站的页脚。</li>
       <li>别人点页脚链接，就能回到本站按备案号查到你的站点。</li>
     </ol>
-    <p class="muted">API：GET /api/filings、GET /api/stats、POST /api/filings、PATCH /api/filings/:id、DELETE /api/filings/:id。</p>
+    <p class="muted">API：GET /api/health、GET /api/filings?page=&limit=&q=&status=&category=、GET /api/stats、POST /api/filings、PATCH /api/filings/:id、DELETE /api/filings/:id。</p>
   </section>
 </main>
 <footer>

@@ -16,3 +16,6 @@ CREATE TABLE IF NOT EXISTS filings (
 -- 同一域名同时只能有一条未被驳回的记录
 CREATE UNIQUE INDEX IF NOT EXISTS idx_filings_domain_active
   ON filings(domain) WHERE status != 'rejected';
+CREATE INDEX IF NOT EXISTS idx_filings_status ON filings(status);
+CREATE INDEX IF NOT EXISTS idx_filings_category ON filings(category);
+CREATE INDEX IF NOT EXISTS idx_filings_created ON filings(id DESC);
