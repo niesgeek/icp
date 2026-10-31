@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>萌ICP备案 · 萌友圈趣味备案</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="hero">
+  <span class="badge">🌸 萌友圈 · 趣味备案</span>
+  <h1>萌ICP备案</h1>
+  <p>给你的个人小站领一个可爱的备案号：查号、申请、挂上页脚代码、通过审核后在公示大厅被大家看到。</p>
+  <p class="muted">本站为趣味社区备案演示，与工信部 ICP 备案无关。</p>
+</header>
+<main>
+  <section class="stats">
+    <div class="stat"><b id="statTotal">0</b><span>累计备案</span></div>
+    <div class="stat"><b id="statApproved">0</b><span>已通过</span></div>
+    <div class="stat"><b id="statPending">0</b><span>待审核</span></div>
+  </section>
+
+  <nav class="tabs">
+    <button data-tab="hall" class="active">备案大厅</button>
+    <button data-tab="apply">申请备案</button>
+    <button data-tab="review">审核台</button>
+    <button data-tab="guide">使用指南</button>
+  </nav>
+
+  <section class="panel" id="panel-hall">
+    <div class="toolbar">
+      <input id="q" placeholder="搜索站名 / 域名 / 备案号">
+      <select id="fCat"><option value="">全部分类</option><option>个人博客</option><option>工具站</option><option>社区论坛</option><option>作品集</option><option>导航站</option><option>其他</option></select>
+      <select id="fStatus"><option value="">全部状态</option><option value="pending">待审核</option><option value="approved">已通过</option><option value="rejected">已驳回</option></select>
+    </div>
+    <div class="grid" id="hall"></div>
+    <div id="detail" style="margin-top:16px"></div>
+  </section>
+
+  <section class="panel" id="panel-apply" style="display:none">
+    <h2>申请备案</h2>
+    <p class="muted">备案号由后端按年份和序号自动生成，例如 萌ICP备2026xxxxx号；同一域名同时只能有一条未被驳回的记录。</p>
+    <form id="applyForm">
+      <div class="row">
+        <div><label>网站名称 *</label><input name="site_name" required placeholder="例如：樱花小站"></div>
+        <div><label>域名 *</label><input name="domain" required placeholder="例如：example.com"></div>
+      </div>
+      <div class="row">
+        <div><label>站长</label><input name="owner_name" placeholder="例如：小樱"></div>
+        <div><label>联系方式</label><input name="contact" placeholder="邮箱或其他联系方式"></div>
+      </div>
+      <label>分类</label>
+      <select name="category"><option>个人博客</option><option>工具站</option><option>社区论坛</option><option>作品集</option><option>导航站</option><option>其他</option></select>
+      <label>网站简介</label>
+      <textarea name="description" rows="3" placeholder="简单介绍你的小站"></textarea>
+      <p><button class="primary" type="submit">提交申请</button></p>
+      <p class="msg" id="applyMsg"></p>
+      <div id="preview"></div>
+    </form>
+  </section>
+
+  <section class="panel" id="panel-review" style="display:none">
+    <h2>审核台</h2>
+    <p class="muted">演示版审核台暂不设登录，生产部署请先加管理员鉴权再开放。</p>
+    <div id="review"></div>
+  </section>
+
+  <section class="panel" id="panel-guide" style="display:none">
+    <h2>使用指南</h2>
+    <ol style="line-height:2">
+      <li>在「申请备案」填网站名和域名，提交后得到你的萌ICP备号。</li>
+      <li>在审核台通过申请（生产环境应由管理员操作）。</li>
+      <li>在站点详情里复制页脚代码，放到你网站的页脚。</li>
+      <li>别人点页脚链接，就能回到本站按备案号查到你的站点。</li>
+    </ol>
+    <p class="muted">API：GET /api/filings、GET /api/stats、POST /api/filings、PATCH /api/filings/:id、DELETE /api/filings/:id。</p>
+  </section>
+</main>
+<footer>
+  萌ICP备案 · 趣味社区备案演示<br>
+  与工信部 ICP 备案无关 · 请勿用于冒充正式备案
+</footer>
+<script src="/app.js"></script>
+</body>
+</html>

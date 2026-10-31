@@ -1,0 +1,1 @@
+{"description":"萌ICP备案：萌友圈趣味备案登记站（非工信部正式 ICP 备案）","engines":{"bun":">=1.0.0"},"name":"moe-icp","private":true,"scripts":{"dev":"bun run server/index.ts","seed":"bun run scripts/seed.ts","start":"bun run server/index.ts"},"type":"module","version":"1.0.0"}
