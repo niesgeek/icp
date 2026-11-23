@@ -46,7 +46,8 @@ function card(r) {
 function showDetail(id) {
   const r = all.find(x => x.id === id); if (!r) return;
   const code = `<a href="${location.origin}/?keyword=${encodeURIComponent(r.icp_number)}" target="_blank">${esc(r.icp_number)}</a>`;
-  $("#detail").innerHTML = `<h3>${esc(r.site_name)}</h3><p class="num">${esc(r.icp_number)}</p><p>域名：${esc(r.domain)} · 站长：${esc(r.owner_name || "-")} · 分类：${esc(r.category)}</p><p>${esc(r.description || "")}</p><p>状态：${statusText[r.status]}${r.review_note ? `（${esc(r.review_note)}）` : ""}</p><p>页脚代码：</p><pre class="code">${esc(code)}</pre><button class="primary" onclick="navigator.clipboard.writeText(${JSON.stringify(code)}).then(()=>alert('已复制页脚代码'))">复制页脚代码</button> <button class="ghost" onclick="delFiling(${r.id})">注销</button>`;
+  $("#detail").innerHTML = `<h3>${esc(r.site_name)}</h3><p class="num">${esc(r.icp_number)}</p><p>域名：${esc(r.domain)} · 站长：${esc(r.owner_name || "-")} · 分类：${esc(r.category)}</p><p>${esc(r.description || "")}</p><p>状态：${statusText[r.status]}${r.review_note ? `（${esc(r.review_note)}）` : ""}</p><p>页脚代码：</p><pre class="code">${esc(code)}</pre><button class="primary" id="copyCodeBtn">复制页脚代码</button> <button class="ghost" onclick="delFiling(${r.id})">注销</button>`;
+  $("#copyCodeBtn").onclick = () => navigator.clipboard.writeText(code).then(() => alert("已复制页脚代码")).catch(() => alert("复制失败，请手动复制上方代码"));
   $("#detail").scrollIntoView({ behavior: "smooth" });
 }
 async function delFiling(id) {
