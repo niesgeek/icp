@@ -7,4 +7,4 @@ pages_build_output_dir = "public"
 [[d1_databases]]
 binding = "DB"
 database_name = "moe-icp-db"
-database_id = "REPLACE_WITH_YOUR_D1_ID"
+database_id = "78becfe8-cba3-43eb-a59f-b2489fa8953d"
