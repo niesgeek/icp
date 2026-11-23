@@ -3,58 +3,91 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>萌ICP备案 · 萌友圈趣味备案</title>
+<title>涅槃ICP备案系统</title>
+<meta name="description" content="涅槃ICP备案系统：给你的个人小站领一个备案号，申请从 101 号起，1–100 号为管理员预留。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/style.css">
 </head>
 <body>
+<nav class="glass-nav" aria-label="导航">
+  <a class="brand" href="#" onclick="return false">
+    <svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 3c1.5 3.5 5 4.5 5 9a5 5 0 0 1-10 0c0-2 1-3.5 2-5 .3 1.5 1 2.5 2 3-.5-2.5 0-5 1-7z"/></svg>
+    <span>涅槃ICP备案系统</span>
+  </a>
+  <div class="nav-tabs" role="tablist">
+    <button data-tab="hall" class="active">备案大厅</button>
+    <button data-tab="apply">申请备案</button>
+    <button data-tab="review">审核台</button>
+    <button data-tab="admin">管理员</button>
+    <button data-tab="guide">使用指南</button>
+  </div>
+</nav>
+
 <header class="hero">
-  <span class="badge">🌸 萌友圈 · 趣味备案</span>
-  <h1>萌ICP备案</h1>
-  <p>给你的个人小站领一个可爱的备案号：查号、申请、挂上页脚代码、通过审核后在公示大厅被大家看到。</p>
-  <p class="muted">本站为趣味社区备案演示，与工信部 ICP 备案无关。</p>
+  <div class="hero-field" aria-hidden="true"><span class="ghost-word">涅槃</span></div>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <p class="eyebrow">社区备案 · 非官方</p>
+      <h1>给你的小站，<br>领一张涅槃的备案证</h1>
+      <p class="lede">提交站点信息，生成专属涅ICP备号，把代码贴到页脚，你的博客就正式涅槃了。申请从 101 号起，1–100 号为管理员预留。</p>
+      <div class="hero-actions">
+        <button class="btn-ink" onclick="showTab('apply')">申请备案</button>
+        <button class="btn-glass" onclick="showTab('hall')">查看大厅</button>
+      </div>
+      <p class="hero-meta"><span id="nextNoMeta">下一号加载中</span></p>
+    </div>
+    <div class="hero-cert" id="heroCert">
+      <p class="cert-kicker">下一张备案证</p>
+      <p class="seal" id="heroSeal">涅ICP备202600101号</p>
+      <p class="cert-site" id="heroSite">待领取 · 下一位备案站长</p>
+      <p class="cert-line"><span>状态</span><span>待申请</span></p>
+      <p class="cert-line"><span>分类</span><span>由申请人填写</span></p>
+      <button class="btn-ink" onclick="showTab('apply')">领这一号</button>
+    </div>
+  </div>
 </header>
+
 <main>
-  <section class="stats">
+  <section class="stats" aria-label="统计">
     <div class="stat"><b id="statTotal">0</b><span>累计备案</span></div>
     <div class="stat"><b id="statApproved">0</b><span>已通过</span></div>
     <div class="stat"><b id="statPending">0</b><span>待审核</span></div>
   </section>
 
-  <nav class="tabs">
-    <button data-tab="hall" class="active">备案大厅</button>
-    <button data-tab="apply">申请备案</button>
-    <button data-tab="review">审核台</button>
-    <button data-tab="guide">使用指南</button>
-  </nav>
-
   <section class="panel" id="panel-hall">
     <div class="toolbar">
-      <input id="q" placeholder="搜索站名 / 域名 / 备案号">
-      <select id="fCat"><option value="">全部分类</option><option>个人博客</option><option>工具站</option><option>社区论坛</option><option>作品集</option><option>导航站</option><option>其他</option></select>
-      <select id="fStatus"><option value="">全部状态</option><option value="pending">待审核</option><option value="approved">已通过</option><option value="rejected">已驳回</option></select>
+      <label class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" placeholder="搜索站名 / 域名 / 备案号">
+      </label>
+      <select id="fStatus" aria-label="状态筛选"><option value="">全部状态</option><option value="pending">待审核</option><option value="approved">已通过</option><option value="rejected">已驳回</option></select>
     </div>
+    <div class="chips" id="catChips" aria-label="分类筛选"></div>
     <div class="grid" id="hall"></div>
     <div id="hallMore"></div>
-    <div id="detail" style="margin-top:16px"></div>
+    <div id="detail"></div>
   </section>
 
   <section class="panel" id="panel-apply" style="display:none">
     <h2>申请备案</h2>
-    <p class="muted">备案号由后端按年份和序号自动生成，例如 萌ICP备2026xxxxx号；同一域名同时只能有一条未被驳回的记录。</p>
+    <p class="muted">备案号由后端按年份和序号自动生成。用户申请从 101 号开始，1–100 号只由管理员添加。</p>
+    <p class="next-line">下一备案号：<span class="seal-inline" id="applyNext">加载中</span></p>
     <form id="applyForm">
       <div class="row">
-        <div><label>网站名称 *</label><input name="site_name" required placeholder="例如：樱花小站"></div>
+        <div><label>网站名称 *</label><input name="site_name" required placeholder="例如：涅槃小站"></div>
         <div><label>域名 *</label><input name="domain" required placeholder="例如：example.com"></div>
       </div>
       <div class="row">
-        <div><label>站长</label><input name="owner_name" placeholder="例如：小樱"></div>
+        <div><label>站长</label><input name="owner_name" placeholder="例如：涅槃"></div>
         <div><label>联系方式</label><input name="contact" placeholder="邮箱或其他联系方式"></div>
       </div>
       <label>分类</label>
       <select name="category"><option>个人博客</option><option>工具站</option><option>社区论坛</option><option>作品集</option><option>导航站</option><option>其他</option></select>
       <label>网站简介</label>
       <textarea name="description" rows="3" placeholder="简单介绍你的小站"></textarea>
-      <p><button class="primary" type="submit">提交申请</button></p>
+      <p><button class="btn-ink" type="submit">提交申请</button></p>
       <p class="msg" id="applyMsg"></p>
       <div id="preview"></div>
     </form>
@@ -67,19 +100,56 @@
     <div id="review"></div>
   </section>
 
+  <section class="panel" id="panel-admin" style="display:none">
+    <h2>管理员</h2>
+    <p class="muted">预留号 1–100 号只能由管理员添加；用户申请从 101 号起。先用管理员口令进入，口令只保存在本页会话中。</p>
+    <div id="adminLogin">
+      <p><input id="adminToken2" type="password" placeholder="管理员口令（ADMIN_TOKEN）" autocomplete="off"></p>
+      <p><button class="btn-ink" id="adminLoginBtn">进入管理</button> <span class="msg" id="adminLoginMsg"></span></p>
+    </div>
+    <div id="adminTools" style="display:none">
+      <p><button class="btn-glass" id="adminLogoutBtn">退出管理</button></p>
+      <h3>预留号 1–100</h3>
+      <p class="muted">已占用的号码显示站名，点击空闲号码可直接填入下方表单。</p>
+      <div class="reserved" id="reservedGrid"></div>
+      <h3>添加预留号</h3>
+      <form id="adminAddForm">
+        <div class="row">
+          <div><label>预留号（1–100）*</label><input name="seq" id="adminSeq" type="number" min="1" max="100" required placeholder="例如：1"></div>
+          <div><label>网站名称 *</label><input name="site_name" required placeholder="例如：涅槃小站"></div>
+        </div>
+        <div class="row">
+          <div><label>域名 *</label><input name="domain" required placeholder="例如：example.com"></div>
+          <div><label>分类</label><select name="category"><option>个人博客</option><option>工具站</option><option>社区论坛</option><option>作品集</option><option>导航站</option><option>其他</option></select></div>
+        </div>
+        <div class="row">
+          <div><label>站长</label><input name="owner_name" placeholder="例如：涅槃"></div>
+          <div><label>联系方式</label><input name="contact" placeholder="邮箱或其他联系方式"></div>
+        </div>
+        <label>网站简介</label>
+        <textarea name="description" rows="3" placeholder="简单介绍这个站点"></textarea>
+        <p><button class="btn-ink" type="submit">添加为已通过</button></p>
+        <p class="msg" id="adminAddMsg"></p>
+      </form>
+      <h3>全部备案</h3>
+      <div id="adminList"></div>
+    </div>
+  </section>
+
   <section class="panel" id="panel-guide" style="display:none">
     <h2>使用指南</h2>
-    <ol style="line-height:2">
-      <li>在「申请备案」填网站名和域名，提交后得到你的萌ICP备号。</li>
+    <ol>
+      <li>在「申请备案」填网站名和域名，提交后得到你的涅ICP备号，从 101 号起按顺序分配。</li>
       <li>在审核台通过申请（生产环境应由管理员操作）。</li>
       <li>在站点详情里复制页脚代码，放到你网站的页脚。</li>
       <li>别人点页脚链接，就能回到本站按备案号查到你的站点。</li>
+      <li>1–100 号为管理员预留号，只能在「管理员」里添加，不开放在线申请。</li>
     </ol>
-    <p class="muted">API：GET /api/health、GET /api/filings?page=&limit=&q=&status=&category=、GET /api/stats、POST /api/filings、PATCH /api/filings/:id、DELETE /api/filings/:id。</p>
+    <p class="muted">API：GET /api/health、GET /api/next、GET /api/filings?page=&amp;limit=&amp;q=&amp;status=&amp;category=、GET /api/stats、POST /api/filings、PATCH /api/filings/:id、DELETE /api/filings/:id、GET /api/admin/check、GET /api/admin/filings、POST /api/admin/filings。</p>
   </section>
 </main>
 <footer>
-  萌ICP备案 · 趣味社区备案演示<br>
+  涅槃ICP备案系统 · 趣味社区备案演示<br>
   与工信部 ICP 备案无关 · 请勿用于冒充正式备案
 </footer>
 <script src="/app.js"></script>

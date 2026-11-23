@@ -19,3 +19,5 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_filings_domain_active
 CREATE INDEX IF NOT EXISTS idx_filings_status ON filings(status);
 CREATE INDEX IF NOT EXISTS idx_filings_category ON filings(category);
 CREATE INDEX IF NOT EXISTS idx_filings_created ON filings(id DESC);
+-- 备案号唯一（空号除外）：防止并发申请撞号；1-100 号为管理员预留号，用户申请从 101 号起
+CREATE UNIQUE INDEX IF NOT EXISTS idx_filings_icp_number ON filings(icp_number) WHERE icp_number != '';
